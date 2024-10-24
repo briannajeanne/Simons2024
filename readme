@@ -1,0 +1,45 @@
+# Bioinformatics Data Processing Pipeline
+
+This pipeline processes genetic variant data, performs allele counting, and creates subset files based on sample IDs and genomic positions.
+
+## Files
+
+### `requirements.txt`
+- Lists required Python packages
+- Main dependency: pandas >= 2.0.0
+
+### `run.py`
+Python script that:
+1. Merges all TSV files from input directory
+2. Fixes sample name (HG10101 → HG00101)
+3. Counts major/minor alleles per sample
+4. Creates subset files based on sample ID last digit
+
+### `tasks.sh`
+Bash script that:
+- Takes the subset files from run.py
+- Splits each file into 1Mbp chunks between positions 10000000-14999999
+- Creates gzipped TSV files named by sample digit and position range
+
+### `check.sh`
+Helper script to:
+- Count words in output TSV files
+- Sort and display results
+
+## Input Data
+Located in `exercise_input_data_public/` directory:
+- Contains gzipped TSV files with variant info and sample genotypes
+- Variant columns: 
+  - #CHROM
+  - POS
+  - ID
+  - REF
+  - ALT
+  - QUAL
+  - FILTER
+  - INFO
+  - FORMAT
+
+## Output
+- `allele_counts.tsv`: Contains major/minor allele counts per sample
+- `output/*.tsv.gz`: Subset files split by sample ID digit and genomic position
